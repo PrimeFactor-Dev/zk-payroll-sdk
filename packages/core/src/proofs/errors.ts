@@ -45,6 +45,37 @@ export class ProofReferenceParsingError extends ZkPayrollError {
 }
 
 /**
+ * A single commitment duplicate violation descriptor carried by
+ * {@link ProofCommitmentDuplicateError}. Kept structurally compatible with
+ * `batch/commitmentDuplicateValidator`'s richer violation type.
+ */
+export interface ProofCommitmentViolation {
+  code: string;
+  index: number;
+  matchedIndex?: number;
+  redactedHash: string;
+  message: string;
+  suggestedFix: string;
+}
+
+/**
+ * Thrown when duplicate or invalid commitment hashes are detected in a
+ * batch before submission. Carries structured, privacy-safe violations so
+ * dashboards can highlight the offending entries without string-parsing.
+ */
+export class ProofCommitmentDuplicateError extends ZkPayrollError {
+  public readonly violations: ProofCommitmentViolation[];
+
+  constructor(message: string, violations: ProofCommitmentViolation[] = []) {
+    super(message, "DUPLICATE_COMMITMENT", {
+      violationCount: violations.length,
+    });
+    this.name = "ProofCommitmentDuplicateError";
+    this.violations = violations;
+  }
+}
+
+/**
  * Dedicated error for missing-proof scenarios.
  * Extends ProofGenerationError so existing catch blocks for
  * ProofGenerationError continue to work, but callers can also

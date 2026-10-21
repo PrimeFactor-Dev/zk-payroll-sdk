@@ -5,3 +5,4 @@ export * from "./deduplication";
 export * from "./partialBatchFailureParser";
 export * from "./chunking";
 export * from "./batchExecutionDependencyValidator";
+export * from "./commitmentDuplicateValidator";
