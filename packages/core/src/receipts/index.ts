@@ -6,3 +6,4 @@ export * from "./digest";
 export * from "./errors";
 export * from "./receiptVerifier";
 export * from "./referenceLookup";
+export * from "./policyRevisionAttachment";
