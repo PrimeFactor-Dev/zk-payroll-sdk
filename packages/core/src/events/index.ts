@@ -20,3 +20,10 @@ export {
   TREASURY_SNAPSHOT_EVENT_NAME,
 } from "./treasurySnapshot";
 export type { TreasurySnapshotEvent } from "./treasurySnapshot";
+export {
+  parseSettlementExpiredEvent,
+  tryParseSettlementExpiredEvent,
+  isSettlementExpiredEvent,
+  parseSettlementExpiredEvents,
+} from "./settlementExpiry";
+export type { SettlementExpiredEvent } from "./settlementExpiry";
