@@ -20,7 +20,7 @@ import { ProofCommitmentDuplicateError } from "../proofs/errors";
  * The commitment hash is typically the `commitmentHash` of a
  * `SalaryCommitment` or the proof hash portion of a proof reference.
  */
-export interface CommitmentEntry {
+export interface BatchCommitmentCheckEntry {
   /** Index of the entry within the batch (zero-based). */
   index: number;
   /**
@@ -37,9 +37,7 @@ export interface CommitmentEntry {
  * Classification codes for commitment duplicate violations.
  */
 export type CommitmentDuplicateCode =
-  | "DUPLICATE_COMMITMENT"
-  | "MISSING_COMMITMENT_HASH"
-  | "INVALID_COMMITMENT_HASH";
+  "DUPLICATE_COMMITMENT" | "MISSING_COMMITMENT_HASH" | "INVALID_COMMITMENT_HASH";
 
 /**
  * Structured description of a single commitment duplicate violation.
@@ -130,7 +128,7 @@ function normalizeHash(hash: string, caseSensitive: boolean): string {
  * ```
  */
 export function validateCommitmentDuplicates(
-  entries: CommitmentEntry[],
+  entries: BatchCommitmentCheckEntry[],
   options: CommitmentDuplicateValidationOptions = {}
 ): CommitmentDuplicateValidationResult {
   const {
@@ -168,8 +166,7 @@ export function validateCommitmentDuplicates(
         index: entry.index,
         redactedHash: redactHash(trimmed),
         message: `Entry ${entry.index} has a malformed commitment hash (expected 64-character hex string).`,
-        suggestedFix:
-          "Regenerate the commitment hash or verify the upstream commitment pipeline.",
+        suggestedFix: "Regenerate the commitment hash or verify the upstream commitment pipeline.",
       });
       continue;
     }
@@ -208,7 +205,7 @@ export function validateCommitmentDuplicates(
  *   invalid commitments are detected. The error message is privacy-safe.
  */
 export function assertNoDuplicateCommitments(
-  entries: CommitmentEntry[],
+  entries: BatchCommitmentCheckEntry[],
   options: CommitmentDuplicateValidationOptions = {}
 ): CommitmentDuplicateValidationResult {
   const result = validateCommitmentDuplicates(entries, options);

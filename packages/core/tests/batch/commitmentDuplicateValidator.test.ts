@@ -12,7 +12,7 @@ import {
   validateCommitmentDuplicates,
   assertNoDuplicateCommitments,
   validateBatchCommitmentHashes,
-  CommitmentEntry,
+  BatchCommitmentCheckEntry,
 } from "../../src/batch/commitmentDuplicateValidator";
 import { ProofCommitmentDuplicateError } from "../../src/proofs/errors";
 
@@ -20,7 +20,7 @@ const HASH_A = "a".repeat(64);
 const HASH_B = "b".repeat(64);
 const HASH_C = "c".repeat(64);
 
-function entry(index: number, commitmentHash?: string): CommitmentEntry {
+function entry(index: number, commitmentHash?: string): BatchCommitmentCheckEntry {
   return { index, commitmentHash };
 }
 
@@ -64,11 +64,7 @@ describe("validateCommitmentDuplicates", () => {
   });
 
   it("skips entries without commitment hashes by default", () => {
-    const result = validateCommitmentDuplicates([
-      entry(0, HASH_A),
-      entry(1),
-      entry(2, undefined),
-    ]);
+    const result = validateCommitmentDuplicates([entry(0, HASH_A), entry(1), entry(2, undefined)]);
     expect(result.hasDuplicates).toBe(false);
     expect(result.uniqueCount).toBe(1);
     expect(result.totalChecked).toBe(3);
@@ -154,9 +150,9 @@ describe("assertNoDuplicateCommitments", () => {
   });
 
   it("throws ProofCommitmentDuplicateError when duplicates exist", () => {
-    expect(() =>
-      assertNoDuplicateCommitments([entry(0, HASH_A), entry(1, HASH_A)])
-    ).toThrow(ProofCommitmentDuplicateError);
+    expect(() => assertNoDuplicateCommitments([entry(0, HASH_A), entry(1, HASH_A)])).toThrow(
+      ProofCommitmentDuplicateError
+    );
   });
 
   it("attaches violations to the thrown error", () => {
@@ -190,10 +186,7 @@ describe("validateBatchCommitmentHashes", () => {
   });
 
   it("skips entries without commitmentHash", () => {
-    const result = validateBatchCommitmentHashes([
-      { commitmentHash: HASH_A },
-      {},
-    ]);
+    const result = validateBatchCommitmentHashes([{ commitmentHash: HASH_A }, {}]);
     expect(result.hasDuplicates).toBe(false);
   });
 });

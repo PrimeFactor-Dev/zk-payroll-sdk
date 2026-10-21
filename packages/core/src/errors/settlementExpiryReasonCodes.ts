@@ -31,13 +31,7 @@ export type SettlementExpiryReasonCodeType =
   (typeof SettlementExpiryReasonCode)[keyof typeof SettlementExpiryReasonCode];
 
 export type SettlementExpiryReasonCategory =
-  | "window"
-  | "treasury"
-  | "policy"
-  | "operator"
-  | "compliance"
-  | "execution"
-  | "unknown";
+  "window" | "treasury" | "policy" | "operator" | "compliance" | "execution" | "unknown";
 
 export interface SettlementExpiryReasonMetadata {
   code: SettlementExpiryReasonCodeType;
@@ -55,20 +49,16 @@ export const SETTLEMENT_EXPIRY_REASON_REGISTRY: Record<
   [SettlementExpiryReasonCode.SETTLEMENT_WINDOW_ELAPSED]: {
     code: SettlementExpiryReasonCode.SETTLEMENT_WINDOW_ELAPSED,
     category: "window",
-    description:
-      "The settlement window closed before the payroll run reached a settled state.",
-    suggestedAction:
-      "Increase the policy settlement window or reschedule the run in a new window.",
+    description: "The settlement window closed before the payroll run reached a settled state.",
+    suggestedAction: "Increase the policy settlement window or reschedule the run in a new window.",
     severity: "error",
     retryable: true,
   },
   [SettlementExpiryReasonCode.INSUFFICIENT_TREASURY_RESERVE]: {
     code: SettlementExpiryReasonCode.INSUFFICIENT_TREASURY_RESERVE,
     category: "treasury",
-    description:
-      "Treasury reserve fell below the policy minimum before settlement could complete.",
-    suggestedAction:
-      "Deposit additional treasury funds and reschedule the run.",
+    description: "Treasury reserve fell below the policy minimum before settlement could complete.",
+    suggestedAction: "Deposit additional treasury funds and reschedule the run.",
     severity: "error",
     retryable: true,
   },
@@ -94,8 +84,7 @@ export const SETTLEMENT_EXPIRY_REASON_REGISTRY: Record<
     code: SettlementExpiryReasonCode.COMPLIANCE_HOLD,
     category: "compliance",
     description: "A compliance hold blocked settlement until the window closed.",
-    suggestedAction:
-      "Resolve the compliance hold and schedule a new run once cleared.",
+    suggestedAction: "Resolve the compliance hold and schedule a new run once cleared.",
     severity: "error",
     retryable: true,
   },
@@ -103,8 +92,7 @@ export const SETTLEMENT_EXPIRY_REASON_REGISTRY: Record<
     code: SettlementExpiryReasonCode.BATCH_TIMEOUT,
     category: "execution",
     description: "Batch submission timed out before all payments confirmed on-ledger.",
-    suggestedAction:
-      "Resume the batch from the last checkpoint or resubmit the remaining entries.",
+    suggestedAction: "Resume the batch from the last checkpoint or resubmit the remaining entries.",
     severity: "error",
     retryable: true,
   },
@@ -119,10 +107,8 @@ export const SETTLEMENT_EXPIRY_REASON_REGISTRY: Record<
   [SettlementExpiryReasonCode.UNKNOWN]: {
     code: SettlementExpiryReasonCode.UNKNOWN,
     category: "unknown",
-    description:
-      "Settlement expired for a reason not covered by the standard code set.",
-    suggestedAction:
-      "Inspect the on-chain event notes and contract logs for the underlying cause.",
+    description: "Settlement expired for a reason not covered by the standard code set.",
+    suggestedAction: "Inspect the on-chain event notes and contract logs for the underlying cause.",
     severity: "warning",
     retryable: true,
   },
@@ -175,7 +161,5 @@ export function normalizeSettlementExpiryReason(
   code: string | undefined | null
 ): SettlementExpiryReasonCodeType {
   if (!code) return SettlementExpiryReasonCode.UNKNOWN;
-  return isKnownSettlementExpiryReason(code)
-    ? code
-    : SettlementExpiryReasonCode.UNKNOWN;
+  return isKnownSettlementExpiryReason(code) ? code : SettlementExpiryReasonCode.UNKNOWN;
 }

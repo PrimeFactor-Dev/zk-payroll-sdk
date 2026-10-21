@@ -11,15 +11,9 @@
  */
 
 import type { RawContractEvent } from "../event-parser";
-import {
-  decodeEventName,
-  decodeAddress,
-  decodeDataMap,
-  decodeU64AsNumber,
-} from "../event-parser";
+import { decodeEventName, decodeAddress, decodeDataMap, decodeU64AsNumber } from "../event-parser";
 import { EventDecodingError } from "./types";
 import {
-  SettlementExpiryReasonCode,
   normalizeSettlementExpiryReason,
   type SettlementExpiryReasonCodeType,
 } from "../errors/settlementExpiryReasonCodes";
@@ -87,8 +81,7 @@ export function parseSettlementExpiredEvent(event: RawContractEvent): Settlement
 
   const data = decodeDataMap(event.data);
 
-  const settlementId =
-    data.settlement_id?.str()?.toString() ?? data.run_id?.str()?.toString();
+  const settlementId = data.settlement_id?.str()?.toString() ?? data.run_id?.str()?.toString();
   if (!settlementId) {
     throw new EventDecodingError(
       "Missing required settlement_id in settlement_expired event data",
@@ -149,11 +142,8 @@ export function isSettlementExpiredEvent(event: RawContractEvent): boolean {
  * `settlement_expired` events. Non-matching events are silently skipped;
  * structurally corrupt settlement events still throw.
  */
-export function parseSettlementExpiredEvents(
-  events: RawContractEvent[]
-): SettlementExpiredEvent[] {
+export function parseSettlementExpiredEvents(events: RawContractEvent[]): SettlementExpiredEvent[] {
   return events
     .map((e) => tryParseSettlementExpiredEvent(e))
     .filter((e): e is SettlementExpiredEvent => e !== null);
 }
-

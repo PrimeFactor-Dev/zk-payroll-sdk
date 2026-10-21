@@ -18,11 +18,7 @@
  * Lifecycle states for a company's platform activation.
  */
 export type CompanyActivationStatus =
-  | "active"
-  | "pending_activation"
-  | "suspended"
-  | "deactivated"
-  | "unknown";
+  "active" | "pending_activation" | "suspended" | "deactivated" | "unknown";
 
 /**
  * Reason codes explaining why a company cannot reserve funds.
@@ -102,7 +98,10 @@ export interface CompanyActivationCheckOptions {
  */
 export function normalizeActivationStatus(raw: string | undefined | null): CompanyActivationStatus {
   if (!raw) return "unknown";
-  const normalized = raw.trim().toLowerCase().replace(/[\s-]+/g, "_");
+  const normalized = raw
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
   switch (normalized) {
     case "active":
     case "activated":

@@ -68,9 +68,7 @@ function makeValidEvent(overrides?: {
     dataEntries.settlement_id = stringScVal("settle_abc123");
   }
   if (!overrides?.omitReasonCode) {
-    dataEntries.reason_code = stringScVal(
-      overrides?.reasonCode ?? "SETTLEMENT_WINDOW_ELAPSED"
-    );
+    dataEntries.reason_code = stringScVal(overrides?.reasonCode ?? "SETTLEMENT_WINDOW_ELAPSED");
   }
   if (!overrides?.omitScheduledAt) {
     dataEntries.scheduled_at = u64ScVal(1700000000);
@@ -107,9 +105,7 @@ describe("parseSettlementExpiredEvent", () => {
   });
 
   it("normalizes unknown reason codes to UNKNOWN", () => {
-    const event = parseSettlementExpiredEvent(
-      makeValidEvent({ reasonCode: "SOME_FUTURE_CODE" })
-    );
+    const event = parseSettlementExpiredEvent(makeValidEvent({ reasonCode: "SOME_FUTURE_CODE" }));
     expect(event.reasonCode).toBe(SettlementExpiryReasonCode.UNKNOWN);
     expect(event.rawReasonCode).toBe("SOME_FUTURE_CODE");
   });
@@ -121,16 +117,12 @@ describe("parseSettlementExpiredEvent", () => {
   });
 
   it("handles missing window_closed_at gracefully", () => {
-    const event = parseSettlementExpiredEvent(
-      makeValidEvent({ omitWindowClosedAt: true })
-    );
+    const event = parseSettlementExpiredEvent(makeValidEvent({ omitWindowClosedAt: true }));
     expect(event.windowClosedAt).toBeUndefined();
   });
 
   it("handles missing scheduled_at as zero", () => {
-    const event = parseSettlementExpiredEvent(
-      makeValidEvent({ omitScheduledAt: true })
-    );
+    const event = parseSettlementExpiredEvent(makeValidEvent({ omitScheduledAt: true }));
     expect(event.scheduledAt).toBe(0);
   });
 
@@ -152,15 +144,15 @@ describe("parseSettlementExpiredEvent", () => {
   });
 
   it("throws EventDecodingError when settlement_id is missing", () => {
-    expect(() =>
-      parseSettlementExpiredEvent(makeValidEvent({ omitSettlementId: true }))
-    ).toThrow(EventDecodingError);
+    expect(() => parseSettlementExpiredEvent(makeValidEvent({ omitSettlementId: true }))).toThrow(
+      EventDecodingError
+    );
   });
 
   it("throws EventDecodingError when expired_at is missing", () => {
-    expect(() =>
-      parseSettlementExpiredEvent(makeValidEvent({ omitExpiredAt: true }))
-    ).toThrow(EventDecodingError);
+    expect(() => parseSettlementExpiredEvent(makeValidEvent({ omitExpiredAt: true }))).toThrow(
+      EventDecodingError
+    );
   });
 
   it("does not leak sensitive data in error messages", () => {
@@ -250,21 +242,13 @@ describe("SettlementExpiryReasonCode registry", () => {
   });
 
   it("normalizeSettlementExpiryReason maps unknown and empty to UNKNOWN", () => {
-    expect(normalizeSettlementExpiryReason(undefined)).toBe(
-      SettlementExpiryReasonCode.UNKNOWN
-    );
-    expect(normalizeSettlementExpiryReason(null)).toBe(
-      SettlementExpiryReasonCode.UNKNOWN
-    );
-    expect(normalizeSettlementExpiryReason("")).toBe(
-      SettlementExpiryReasonCode.UNKNOWN
-    );
+    expect(normalizeSettlementExpiryReason(undefined)).toBe(SettlementExpiryReasonCode.UNKNOWN);
+    expect(normalizeSettlementExpiryReason(null)).toBe(SettlementExpiryReasonCode.UNKNOWN);
+    expect(normalizeSettlementExpiryReason("")).toBe(SettlementExpiryReasonCode.UNKNOWN);
     expect(normalizeSettlementExpiryReason("POLICY_EXPIRED")).toBe(
       SettlementExpiryReasonCode.POLICY_EXPIRED
     );
-    expect(normalizeSettlementExpiryReason("garbage")).toBe(
-      SettlementExpiryReasonCode.UNKNOWN
-    );
+    expect(normalizeSettlementExpiryReason("garbage")).toBe(SettlementExpiryReasonCode.UNKNOWN);
   });
 
   it("registry covers all declared codes with no extras", () => {

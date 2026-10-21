@@ -88,7 +88,9 @@ describe("validatePolicyRevision", () => {
   });
 
   it("accepts numeric and string effectiveAt", () => {
-    expect(validatePolicyRevision({ ...VALID_REVISION, effectiveAt: 1700000000000 })).toHaveLength(0);
+    expect(validatePolicyRevision({ ...VALID_REVISION, effectiveAt: 1700000000000 })).toHaveLength(
+      0
+    );
     expect(
       validatePolicyRevision({ ...VALID_REVISION, effectiveAt: "2026-01-01T00:00:00Z" })
     ).toHaveLength(0);
@@ -166,9 +168,9 @@ describe("attachPolicyRevision", () => {
   });
 
   it("throws PolicyRevisionAttachmentError for invalid revisions (rejected case)", () => {
-    expect(() =>
-      attachPolicyRevision(makeReceipt(), { policyId: "", revision: 1 })
-    ).toThrow(PolicyRevisionAttachmentError);
+    expect(() => attachPolicyRevision(makeReceipt(), { policyId: "", revision: 1 })).toThrow(
+      PolicyRevisionAttachmentError
+    );
   });
 
   it("skips validation when validate is false", () => {
@@ -184,7 +186,9 @@ describe("attachPolicyRevision", () => {
     const receipt = makeReceipt({ metadata: { customKey: "customValue" } });
     const updated = attachPolicyRevision(receipt, VALID_REVISION);
     expect((updated.metadata as Record<string, unknown>).customKey).toBe("customValue");
-    expect((updated.metadata as Record<string, unknown>)[POLICY_REVISION_METADATA_KEY]).toBeDefined();
+    expect(
+      (updated.metadata as Record<string, unknown>)[POLICY_REVISION_METADATA_KEY]
+    ).toBeDefined();
   });
 
   it("does not leak salary or employee data", () => {

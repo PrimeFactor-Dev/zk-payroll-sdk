@@ -14,7 +14,6 @@ import {
   assertCompanyCanReserveFunds,
   guardFundReservation,
   CompanyNotActivatedError,
-  CompanyActivationState,
 } from "../../src/payroll/companyActivationGuard";
 
 const TEST_COMPANY = "GABCDEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGH234567ABCDEF";
@@ -231,9 +230,9 @@ describe("guardFundReservation", () => {
   });
 
   it("throws when reservation is blocked", () => {
-    expect(() =>
-      guardFundReservation({ company: TEST_COMPANY, rawStatus: "deactivated" })
-    ).toThrow(CompanyNotActivatedError);
+    expect(() => guardFundReservation({ company: TEST_COMPANY, rawStatus: "deactivated" })).toThrow(
+      CompanyNotActivatedError
+    );
   });
 
   it("propagates options", () => {
