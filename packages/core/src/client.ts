@@ -182,3 +182,23 @@ export class ProofVerificationClient {
     return verifyProofWithAdapter(this.adapter, input);
   }
 }
+
+// ── Company activation guard (facade) ─────────────────────────────────────────
+// Re-exported so dashboard/client code can validate activation state before
+// reserving treasury funds without importing from the payroll module directly.
+
+export {
+  evaluateCompanyActivation,
+  assertCompanyCanReserveFunds,
+  guardFundReservation,
+  normalizeActivationStatus,
+  CompanyNotActivatedError,
+} from "./payroll/companyActivationGuard";
+export type {
+  CompanyActivationState,
+  CompanyActivationInput,
+  CompanyActivationStatus,
+  CompanyActivationBlockReason,
+  CompanyActivationCheckOptions,
+  CompanyActivationErrorCode,
+} from "./payroll/companyActivationGuard";

@@ -37,3 +37,4 @@ export * from "./periodReopeningRestrictions";
 export * from "./compensationGroupMembership";
 export * from "./reviewDecisionCompleteness";
 export * from "./releaseReadinessAssessment";
+export * from "./companyActivationGuard";
